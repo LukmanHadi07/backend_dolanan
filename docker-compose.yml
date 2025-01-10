@@ -1,0 +1,45 @@
+services:
+  backend_dolanan:
+   container_name: backend_dolanan
+   build: .
+   volumes:
+     - ./dolanan:/var/www/html
+   ports:
+     - "2000:80"
+  
+  db:
+    image: mariadb:latest
+    container_name: backend_dolanan_mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=200400
+      - MYSQL_DATABASE= dolanan_app
+      - MYSQL_USER = lukmanhadi20
+      - MYSQL_PASSWORD = 200400
+    volumes:
+       - db_data:/var/lib/mysql
+    ports:
+       - "3308:3308"
+    networks:
+       - backend_dolanan_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: backend_dolanan_phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_USER: lukmanhadi20
+      PMA_PASSWORD: 200400
+      PMA_PORT: 3306
+    ports:
+      - 8081:80                # phpMyAdmin diakses melalui port 8081
+    depends_on:
+      - db
+    networks:
+      - backend_dolanan_network
+
+volumes:
+  db_data:
+
+networks:
+  backend_dolanan_network:
+    driver: bridge
