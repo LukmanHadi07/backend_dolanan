@@ -1,4 +1,3 @@
-
 services:
   backend_dolanan:
     container_name: dolanan
@@ -10,7 +9,6 @@ services:
     networks:
       - dolanan-network
 
-
   db:
     image: mariadb:latest
     container_name: dolanan-mariadb
@@ -20,12 +18,11 @@ services:
       MYSQL_USER: lukmanhadi20
       MYSQL_PASSWORD: 200400
     volumes:
-      - db_data:/var/lib/mysql  
+      - db_data:/var/lib/mysql
     ports:
-      - 3306:3306            
+      - 3306:3306
     networks:
       - dolanan-network
-
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -36,15 +33,14 @@ services:
       PMA_PASSWORD: 200400
       PMA_PORT: 3306
     ports:
-      - 8082:80                
+      - 8082:80
     depends_on:
       - db
     networks:
       - dolanan-network
 
 volumes:
-  db_data:                     
+  db_data:
 networks:
   dolanan-network:
-    driver: bridge             
-
+    driver: bridge
