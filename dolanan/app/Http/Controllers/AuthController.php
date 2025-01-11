@@ -61,16 +61,34 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(Request $request)
     {
-        $credentials = request(['email', 'password']);
+        $credentials = $request->only('email', 'password');
 
         if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return $this->respondWithToken($token);
+        // Jika yang login adalah admin
+        $user = auth()->user();
+        if ($user->isAdmin()) {
+            return response()->json([
+                'access_token' => $token,
+                'role' => 'admin',
+                'token_type' => 'bearer',
+                'expires_in' => auth()->factory()->getTTL() * 60
+            ]);
+        }
+
+        // Jika pengguna biasa
+        return response()->json([
+            'access_token' => $token,
+            'role' => 'user',
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60
+        ]);
     }
+
 
     /**
      * Get the authenticated User.

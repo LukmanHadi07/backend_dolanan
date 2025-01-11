@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JwtSubject 
+class User extends Authenticatable implements JwtSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -24,6 +24,11 @@ class User extends Authenticatable implements JwtSubject
         return [];
     }
 
+    public function isAdmin()
+{
+    return $this->role === 'admin';
+}
+
     /**
      * The attributes that are mass assignable.
      *
@@ -33,6 +38,7 @@ class User extends Authenticatable implements JwtSubject
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -45,7 +51,7 @@ class User extends Authenticatable implements JwtSubject
         'remember_token',
     ];
 
-    
+
 
     /**
      * The attributes that should be cast.
@@ -57,5 +63,5 @@ class User extends Authenticatable implements JwtSubject
         'password' => 'hashed',
     ];
 
-    
+
 }
